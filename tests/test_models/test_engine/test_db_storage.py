@@ -88,40 +88,41 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
+
 class TestDBStorageMethods(unittest.TestCase):
     def test_get_method(self):
         """Create a new user object and add it to the new storage engine"""
-	user = User()
-	user.name = 'Mr Kaplan'
-	user.email = 'kaplan@gmail.com'
-	storage.new(user)
-	storage.save()
+        user = User()
+        user.name = 'Mr Kaplan'
+        user.email = 'kaplan@gmail.com'
+        storage.new(user)
+        storage.save()
 
         # Retrieve the user object using the get method
-	get_user = storage.get(User, user.id)
+        get_user = storage.get(User, user.id)
 
         # Assert that the retrieved user object is the same as the original one
-	self.assertEqual(user, get_user)
+        self.assertEqual(user, get_user)
 
     def test_count_method(self):
         state1 = State()
-	state1.name = 'Myanmar'
-	storage.new(state1)
+        state1.name = 'Myanmar'
+        storage.new(state1)
 
         # Create another state object and add it to storage
-	state2 = State()
-	state2.name = 'Arizona'
-	storage.new(State2)
+        state2 = State()
+        state2.name = 'Arizona'
+        storage.new(State2)
 
         # Save the states
-	storage.save()
+        storage.save()
 
         # Count the number of state objects in storage
-	state_count = storage.count(State)
+        state_count = storage.count(State)
 
         # Assert that the count is equal to the number of states added
         # Added states in this case = 2
-	self.assertEqual(state_count, 2)
+        self.assertEqual(state_count, 2)
 
 
 if __name__ == "__main__":

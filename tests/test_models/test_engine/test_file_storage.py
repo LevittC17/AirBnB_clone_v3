@@ -6,6 +6,7 @@ Contains the TestFileStorageDocs classes
 from datetime import datetime
 import inspect
 import models
+from models import storage
 from models.engine import file_storage
 from models.amenity import Amenity
 from models.base_model import BaseModel
@@ -113,3 +114,53 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+
+class TestFileStorageMethods(unittest.TestCase):
+    def setStorage(self):
+        self.storage = FileStorage()
+
+    def tearStorageIfEmpty(self):
+        self.storage.__FileStorage__objects = {}
+	try:
+	    os.remove('file.json')
+	except:
+	    pass
+
+    def tests_get_method(self):
+        """Create a new user object and add it to the storage engine"""
+	user = User()
+	user.name = 'Dembe Zouma'
+	user.email = 'zouma@yahoo.com'
+	self.storage.new(User)
+	self.storage.save()
+
+        # Retrieve the user using the get method
+	get_user = self.storage.get(User, user.id)
+
+        # Assert that the retrieved user object is the same as the original one
+	self.assertEqual(user, get_user)
+
+    def tests_count_method(self):
+        """Create a new State object and add it to the storage engine"""
+	state1 = State()
+	state1.name = 'Mehico'
+	self.storage.new(state1)
+
+        # Another State object and add it to the storage engine
+	state2 = State()
+	state2.name = 'Brasilia'
+	self.storage.new(state2)
+
+        # Saving the changes made to file storage
+	self.storage.save()
+
+        # Count the number of state objects
+	state_count = self.storage.count(State)
+
+        # Assert that the count is equal to 2, states == 2
+	self.assertEqual(state_count, 2)
+
+
+if __name__ == "__main__":
+    unittest.main()
